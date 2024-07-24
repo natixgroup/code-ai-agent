@@ -1,12 +1,9 @@
-import ChatGPTDataChunk from './chatgpt-datachunk';
 export default class ChatGPTBody {
   private rows: any;
   private messages: any;
-  private content: string;
   constructor() {
     this.rows = [];
     this.messages= [];
-    this.content = '';
   }
 
   appendUniquely(rows: any) {
@@ -19,8 +16,7 @@ export default class ChatGPTBody {
 
   getContent() {
     this.messages = this.parseMessages();
-    this.content = JSON.stringify(this.messages);
-    return this.content;
+    return {messages : this.messages, model : 'gpt-4-turbo'}
   }
 
   private parseMessages(): any {
