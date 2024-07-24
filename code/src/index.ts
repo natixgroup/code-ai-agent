@@ -1,15 +1,23 @@
-const express = require('express');
-const dotenv = require('dotenv');
+import express from 'express';
+import dotenv from 'dotenv';
+import axios from 'axios';
+import sqlite3 from 'sqlite3';
+import router from './routes';
 
+// Initialize dotenv
 dotenv.config();
 
-const app = express();
-const port = process.env.PORT || 3000;
- 
-app.get('/', (req:any, res:any) => {
-  res.send('Express + TypeScript Server');
-});
+// Create a new express application instance
+const app: express.Application = express();
+const port: string | number = process.env.PORT || 3000;
 
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Use the router
+app.use(router);
+
+// Start the server
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
