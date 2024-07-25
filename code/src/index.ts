@@ -1,7 +1,5 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import axios from 'axios';
-import sqlite3 from 'sqlite3';
 import router from './routes';
 
 // Initialize dotenv

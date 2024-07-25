@@ -1,4 +1,4 @@
-export default class ChatGPTDataChunk {
+export default class DataChunk {
   id: number;
   path: string;
   value: string;

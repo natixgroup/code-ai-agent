@@ -1,11 +1,11 @@
 export default class GeminiBody {
   private rows: any;
-  private contents: any;
+  private chunks: any;
   private systemInstruction: string;
 
   constructor() {
     this.rows = [];
-    this.contents= [];
+    this.chunks= [];
     this.systemInstruction = '';
   }
 
@@ -17,18 +17,18 @@ export default class GeminiBody {
     }
   }
 
-  getContent() {
-    this.contents = this.parseContents();
+  getBody() {
+    this.chunks = this.parseChunks();
     return {
       system_instruction: { parts : { text : this.systemInstruction}},
-      contents: this.contents
+      contents: this.chunks
     }
   }
   getSystemInstruction() {
     return this.systemInstruction;
   }
 
-  private parseContents(): any {
+  private parseChunks(): any {
     let r: string = '';
     let t: string = '';
     for (let i = 0; i < this.rows.length; i++) {
@@ -39,10 +39,10 @@ export default class GeminiBody {
         r = this.rows[i].value;
         i++;
         t = this.rows[i].value;
-        this.contents.push({role: r, parts:[{text:t}] });
+        this.chunks.push({role: r, parts:[{text:t}] });
       }
     }
-    return this.contents;
+    return this.chunks;
   }
 }
 

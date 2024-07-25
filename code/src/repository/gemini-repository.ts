@@ -1,4 +1,4 @@
-import GeminiDataChunk from '../model/gemini-datachunk';
+import DataChunk from '../model/datachunk';
 import GeminiBody from '../model/gemini-body';
 import { Database } from 'sqlite3';
 
@@ -14,7 +14,7 @@ export default class GeminiRepository {
     this.db.run('DELETE FROM data');
   }
   // Method to save the ChatGPT messages
-  save(data: GeminiDataChunk) {
+  save(data: DataChunk) {
     this.db.exec(`INSERT INTO data (id, path, value) VALUES (${data.id}, '${data.path}', '${data.value}')`); 
   }
 

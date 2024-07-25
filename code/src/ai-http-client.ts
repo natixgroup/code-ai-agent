@@ -32,7 +32,6 @@ export default class AIHttpClient {
   }
 
   setBody(body: object) {
-    console.log(body);
     this.body = body;
   }
 
@@ -44,7 +43,7 @@ export default class AIHttpClient {
         return response.data;
       })
       .catch((error) => {
-        console.log('in catch:' + error);
+        console.log(this.provider + ' in catch: ' + error);
       });
   }
 }

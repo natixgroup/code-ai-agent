@@ -1,9 +1,9 @@
 export default class ChatGPTBody {
   private rows: any;
-  private messages: any;
+  private chunks: any;
   constructor() {
     this.rows = [];
-    this.messages= [];
+    this.chunks= [];
   }
 
   appendUniquely(rows: any) {
@@ -14,21 +14,21 @@ export default class ChatGPTBody {
     }
   }
 
-  getContent() {
-    this.messages = this.parseMessages();
-    return {messages : this.messages, model : 'gpt-4-turbo'}
+  getBody() {
+    this.chunks = this.parseChunks();
+    return {messages : this.chunks, model : 'gpt-4-turbo'}
   }
 
-  private parseMessages(): any {
+  private parseChunks(): any {
     let r: string = '';
     let c: string = '';
     for (let i = 0; i < this.rows.length; i++) {
       r = this.rows[i].value;
       i++;
       c = this.rows[i].value;
-      this.messages.push({role: r, content: c});
+      this.chunks.push({role: r, content: c});
     }
-    return this.messages;
+    return this.chunks;
   }
 }
 

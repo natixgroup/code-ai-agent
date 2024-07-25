@@ -1,8 +1,7 @@
 import express, { Request, Response, Router } from 'express';
 import ChatGPTRepository from './repository/chatgpt-repository';
 import GeminiRepository from './repository/gemini-repository';
-import ChatGPTDataChunk from './model/chatgpt-datachunk';
-import GeminiDataChunk from './model/gemini-datachunk';
+import DataChunk from './model/datachunk';
 import AIHttpClient from './ai-http-client';
 
 const router: Router = express.Router();
@@ -30,15 +29,15 @@ router.post('/chatgpt', (req: Request, res: Response) => {
   chatGPTRepository.init();
   let JSONBody = req.body;
   if (JSONBody.messages) {
-    let chatGPTMessagesRole = new ChatGPTDataChunk(chatGPTCounter, 'messages[].role', JSONBody.messages.role);
+    let chatGPTMessagesRole = new DataChunk(chatGPTCounter, 'messages[].role', JSONBody.messages.role);
     chatGPTRepository.save(chatGPTMessagesRole);
-    let chatGPTMessagesContent = new ChatGPTDataChunk(chatGPTCounter, 'messages[].content', JSONBody.messages.content);
+    let chatGPTMessagesContent = new DataChunk(chatGPTCounter, 'messages[].content', JSONBody.messages.content);
     chatGPTRepository.save(chatGPTMessagesContent);
   } 
   if (JSONBody.length === 0) {
     chatGPTRepository.findMessages()
       .then((chatGPTBody) => {
-        let r = chatGPTBody.getContent(); 
+        let r = chatGPTBody.getBody(); 
         let aiHttpClient = new AIHttpClient('chatgpt');
         aiHttpClient.setBody(r);
         aiHttpClient.post()
@@ -55,19 +54,19 @@ router.post('/gemini', (req: Request, res: Response) => {
   let geminiRepository = new GeminiRepository();
   geminiRepository.init();
   if(JSONBody.contents) {
-    let geminiContentsRole = new GeminiDataChunk(geminiCounter, 'contents[].role', JSONBody.contents.role);
+    let geminiContentsRole = new DataChunk(geminiCounter, 'contents[].role', JSONBody.contents.role);
     geminiRepository.save(geminiContentsRole);
-    let geminiContentsContent = new GeminiDataChunk(geminiCounter, 'contents[].text', JSONBody.contents.parts[0].text);
+    let geminiContentsContent = new DataChunk(geminiCounter, 'contents[].text', JSONBody.contents.parts[0].text);
     geminiRepository.save(geminiContentsContent);
   }
   if (JSONBody.system_instruction) {
-    let geminiSystemInstruction = new GeminiDataChunk(geminiCounter, 'system_instruction', JSONBody.system_instruction.parts.text);
+    let geminiSystemInstruction = new DataChunk(geminiCounter, 'system_instruction', JSONBody.system_instruction.parts.text);
     geminiRepository.save(geminiSystemInstruction);
   }
   if (JSONBody.length === 0) {
     geminiRepository.findContents()
       .then((geminiBody) => {
-        let r = geminiBody.getContent();
+        let r = geminiBody.getBody();
         let aiHttpClient = new AIHttpClient('gemini');
         aiHttpClient.setBody(r);
         aiHttpClient.post()

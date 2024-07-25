@@ -1,4 +1,4 @@
-import ChatGPTDataChunk from '../model/chatgpt-datachunk';
+import DataChunk from '../model/datachunk';
 import ChatGPTBody from '../model/chatgpt-body';
 import { Database } from 'sqlite3';
 
@@ -14,7 +14,7 @@ export default class ChatGPTRepository {
     this.db.run('DELETE FROM data');
   }
   // Method to save the ChatGPT messages
-  save(data: ChatGPTDataChunk) {
+  save(data: DataChunk) {
     this.db.exec(`INSERT INTO data (id, path, value) VALUES (${data.id}, '${data.path}', '${data.value}')`); 
   }
 
