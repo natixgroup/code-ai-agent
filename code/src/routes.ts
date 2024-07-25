@@ -45,9 +45,8 @@ router.post('/chatgpt', (req: Request, res: Response) => {
           .then((response) => {res.send(response);})
           .catch((err) => {res.send(err);});
       })
-      .catch((err) => {
-        res.send(err);
-      });
+      .then(() => {chatGPTRepository.close();})
+      .catch((err) => {res.send(err);});
   }
 });
 router.post('/gemini', (req: Request, res: Response) => {
@@ -75,9 +74,8 @@ router.post('/gemini', (req: Request, res: Response) => {
           .then((response) => {res.send(response);})
           .catch((err) => {res.send(err);});
       })
-      .catch((err) => {
-        res.send(err);
-      });
+      .then(() => {geminiRepository.close();})
+      .catch((err) => {res.send(err);});
   }
 });
 
