@@ -29,7 +29,6 @@ router.post('/chatgpt', (req: Request, res: Response) => {
   let chatGPTRepository = new ChatGPTRepository();
   chatGPTRepository.init();
   let JSONBody = req.body;
-  // if the JSONBody has a "messages" key, then it is a ChatGPT message
   if (JSONBody.messages) {
     let chatGPTMessagesRole = new ChatGPTDataChunk(chatGPTCounter, 'messages[].role', JSONBody.messages.role);
     chatGPTRepository.save(chatGPTMessagesRole);
@@ -70,9 +69,6 @@ router.post('/gemini', (req: Request, res: Response) => {
     geminiRepository.findContents()
       .then((geminiBody) => {
         let r = geminiBody.getContent();
-        console.log('=================================');
-        console.log('Gemini Body');
-        console.log(r);
         let aiHttpClient = new AIHttpClient('gemini');
         aiHttpClient.setBody(r);
         aiHttpClient.post()

@@ -17,6 +17,7 @@ export default class AIHttpClient {
     this.tokenHeaderValue = '';
     if (this.provider === 'chatgpt') {
       this.url = 'https://api.openai.com/v1/chat/completions';
+      // this.url = 'https://eowloffrpvxwtqp.m.pipedream.net/v1/chat/completions'
       this.token = process.env.OPENAI_API_KEY? process.env.OPENAI_API_KEY : '';
       this.tokenHeaderName = 'Authorization';
       this.tokenHeaderValue = `Bearer ${this.token}`;
@@ -31,6 +32,7 @@ export default class AIHttpClient {
   }
 
   setBody(body: object) {
+    console.log(body);
     this.body = body;
   }
 
@@ -38,7 +40,6 @@ export default class AIHttpClient {
     axios.defaults.headers.common[this.tokenHeaderName] = this.tokenHeaderValue;
     return axios.post(this.url, this.body)
       .then((response) => {
-        console.log('+++++++++++++++++ in then:')
         console.log(response.data);
         return response.data;
       })
