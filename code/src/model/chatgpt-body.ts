@@ -16,7 +16,12 @@ export default class ChatGPTBody {
 
   getBody() {
     this.chunks = this.parseChunks();
-    return {messages : this.chunks, model : 'gpt-4-turbo'}
+    return {
+      messages : this.chunks, 
+      model : 'gpt-4-turbo',
+      temperature : 0.2,
+      top_p : 0.1,
+    }
   }
 
   private parseChunks(): any {
