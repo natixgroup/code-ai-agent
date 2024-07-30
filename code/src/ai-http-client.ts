@@ -35,15 +35,15 @@ export default class AIHttpClient {
     this.body = body;
   }
 
-  post(): Promise<any> {
-    axios.defaults.headers.common[this.tokenHeaderName] = this.tokenHeaderValue;
-    return axios.post(this.url, this.body)
-      .then((response) => {
-        console.log(response.data);
-        return response.data;
-      })
-      .catch((error) => {
-        console.log(this.provider + ' in catch: ' + error);
-      });
+  async post(): Promise<any> {
+    try {
+      axios.defaults.headers.common[this.tokenHeaderName] = this.tokenHeaderValue;
+      const response = await axios.post(this.url, this.body);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error(`${this.provider} in catch: ${error}`);
+      throw error; // Rethrow the error to handle it in the calling function
+    }
   }
 }
