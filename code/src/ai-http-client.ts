@@ -55,7 +55,7 @@ export default class AIHttpClient {
       // Set the content-length header
       response.headers['content-length'] = dataSizeInBytes;
       console.log(response.data);
-      return response;
+      return response.data;
     } catch (error) {
       console.error(`${this.provider} in catch: ${error}`);
       throw error; 
