@@ -15,7 +15,7 @@ export default class ChatGPTBody {
   }
 
   getBody() {
-    this.chunks = this.parseChunks();
+    this.parseChunks();
     return {
       messages : this.chunks, 
       model : 'gpt-4-turbo',
@@ -24,16 +24,10 @@ export default class ChatGPTBody {
     }
   }
 
-  private parseChunks(): any {
-    let r: string = '';
-    let c: string = '';
+  private parseChunks(): void {
     for (let i = 0; i < this.rows.length; i++) {
-      r = this.rows[i].value;
-      i++;
-      c = this.rows[i].value;
-      this.chunks.push({role: r, content: c});
+      this.chunks.push({role: this.rows[i].role, content: this.rows[i].content});
     }
-    return this.chunks;
   }
 }
 

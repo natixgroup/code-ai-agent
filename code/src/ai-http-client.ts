@@ -41,7 +41,7 @@ export default class AIHttpClient {
     try {
       axios.defaults.headers.common[this.tokenHeaderName] = this.tokenHeaderValue;
       const response = await axios.post(this.url, this.body);
-      console.log(response.data);
+      console.log(JSON.stringify(response.data, null, 2));
       return response.data;
     } catch (error) {
       console.error(`${this.provider} in catch: ${error}`);

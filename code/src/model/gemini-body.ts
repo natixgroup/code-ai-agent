@@ -25,7 +25,7 @@ export default class GeminiBody {
   }
 
   getBody() {
-    this.chunks = this.parseChunks();
+    this.parseChunks();
     return {
       system_instruction: { parts : { text : this.systemInstruction}},
       contents: this.chunks,
@@ -34,21 +34,15 @@ export default class GeminiBody {
     }
   }
 
-  private parseChunks(): any {
-    let r: string = '';
-    let t: string = '';
+  private parseChunks(): void {
     for (let i = 0; i < this.rows.length; i++) {
-      if (this.rows[i].path === 'system_instruction') {
-        this.systemInstruction = this.rows[i].value;
-        continue;
-      } else {
-        r = this.rows[i].value;
-        i++;
-        t = this.rows[i].value;
-        this.chunks.push({role: r, parts:[{text:t}] });
+      if (this.rows[i].role) {
+        this.chunks.push({role: this.rows[i].role , parts:[{text: this.rows[i].text }] });
+      }
+      else {
+        this.systemInstruction = this.rows[i].text
       }
     }
-    return this.chunks;
   }
 }
 

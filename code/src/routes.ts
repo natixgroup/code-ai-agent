@@ -1,7 +1,10 @@
 import express, { Request, Response, Router } from 'express';
 import ChatGPTRepository from './repository/chatgpt-repository';
+import ChatGPTMessageChunk from './model/chatgpt-message-chunk';
 import GeminiRepository from './repository/gemini-repository';
-import DataChunk from './model/datachunk';
+import GeminiSystemInstructionChunk from './model/gemini-systeminstruction-chunk';
+import GeminiContentChunk from './model/gemini-content-chunk';
+
 import AIHttpClient from './ai-http-client';
 
 const router: Router = express.Router();
@@ -31,10 +34,8 @@ router.post('/chatgpt', (req: Request, res: Response) => {
   chatGPTRepository.init();
   let JSONBody = req.body;
   if (JSONBody.messages) {
-    let chatGPTMessagesRole = new DataChunk(chatGPTCounter, 'messages[].role', JSONBody.messages.role);
-    chatGPTRepository.save(chatGPTMessagesRole);
-    let chatGPTMessagesContent = new DataChunk(chatGPTCounter, 'messages[].content', JSONBody.messages.content);
-    chatGPTRepository.save(chatGPTMessagesContent);
+    let chatGPTMessage = new ChatGPTMessageChunk(chatGPTCounter, JSONBody.messages.role, JSONBody.messages.content);
+    chatGPTRepository.save(chatGPTMessage);
     res.send({});
     res.end();
   } 
@@ -58,15 +59,13 @@ router.post('/gemini', (req: Request, res: Response) => {
   let geminiRepository = new GeminiRepository();
   geminiRepository.init();
   if(JSONBody.contents) {
-    let geminiContentsRole = new DataChunk(geminiCounter, 'contents[].role', JSONBody.contents.role);
-    geminiRepository.save(geminiContentsRole);
-    let geminiContentsContent = new DataChunk(geminiCounter, 'contents[].text', JSONBody.contents.parts[0].text);
-    geminiRepository.save(geminiContentsContent);
+    let geminiContent= new GeminiContentChunk(geminiCounter, JSONBody.contents.role, JSONBody.contents.parts[0].text);
+    geminiRepository.save(geminiContent);
     res.send({});
     res.end();
   }
   if (JSONBody.system_instruction) {
-    let geminiSystemInstruction = new DataChunk(geminiCounter, 'system_instruction', JSONBody.system_instruction.parts.text);
+    let geminiSystemInstruction = new GeminiSystemInstructionChunk(geminiCounter, JSONBody.system_instruction.parts.text);
     geminiRepository.save(geminiSystemInstruction);
     res.send({});
     res.end();
