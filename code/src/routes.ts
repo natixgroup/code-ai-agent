@@ -33,6 +33,7 @@ router.post('/chatgpt', (req: Request, res: Response) => {
     chatGPTRepository.save(chatGPTMessagesRole);
     let chatGPTMessagesContent = new DataChunk(chatGPTCounter, 'messages[].content', JSONBody.messages.content);
     chatGPTRepository.save(chatGPTMessagesContent);
+    res.send({});
   } 
   if (JSONBody.length === 0) {
     chatGPTRepository.findMessages()
@@ -58,10 +59,12 @@ router.post('/gemini', (req: Request, res: Response) => {
     geminiRepository.save(geminiContentsRole);
     let geminiContentsContent = new DataChunk(geminiCounter, 'contents[].text', JSONBody.contents.parts[0].text);
     geminiRepository.save(geminiContentsContent);
+    res.send({});
   }
   if (JSONBody.system_instruction) {
     let geminiSystemInstruction = new DataChunk(geminiCounter, 'system_instruction', JSONBody.system_instruction.parts.text);
     geminiRepository.save(geminiSystemInstruction);
+    res.send({});
   }
   if (JSONBody.length === 0) {
     geminiRepository.findContents()
