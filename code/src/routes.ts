@@ -15,13 +15,15 @@ router.get('/chatgpt/clear', (req: Request, res: Response) => {
   let chatGPTRepository = new ChatGPTRepository();
   chatGPTRepository.clear();
   chatGPTRepository.close();
-  res.send('ChatGPT Cleared');
+  res.send({});
+  res.end();
 });
 router.get('/gemini/clear', (req: Request, res: Response) => {
   let geminiRepository = new GeminiRepository();
   geminiRepository.clear();
   geminiRepository.close();
-  res.send('Gemini Cleared');
+  res.send({});
+  res.end();
 });
 router.post('/chatgpt', (req: Request, res: Response) => {
   chatGPTCounter++;
@@ -34,6 +36,7 @@ router.post('/chatgpt', (req: Request, res: Response) => {
     let chatGPTMessagesContent = new DataChunk(chatGPTCounter, 'messages[].content', JSONBody.messages.content);
     chatGPTRepository.save(chatGPTMessagesContent);
     res.send({});
+    res.end();
   } 
   if (JSONBody.length === 0) {
     chatGPTRepository.findMessages()
@@ -42,11 +45,11 @@ router.post('/chatgpt', (req: Request, res: Response) => {
         let aiHttpClient = new AIHttpClient('chatgpt');
         aiHttpClient.setBody(r);
         aiHttpClient.post()
-          .then((response) => {res.send(response);})
-          .catch((err) => {res.send(err);});
+          .then((response) => {res.send(response); res.end(); })
+          .catch((err) => {res.send(err); res.end(); });
       })
       .then(() => {chatGPTRepository.close();})
-      .catch((err) => {res.send(err);});
+      .catch((err) => {res.send(err); res.end();});
   }
 });
 router.post('/gemini', (req: Request, res: Response) => {
@@ -60,11 +63,13 @@ router.post('/gemini', (req: Request, res: Response) => {
     let geminiContentsContent = new DataChunk(geminiCounter, 'contents[].text', JSONBody.contents.parts[0].text);
     geminiRepository.save(geminiContentsContent);
     res.send({});
+    res.end();
   }
   if (JSONBody.system_instruction) {
     let geminiSystemInstruction = new DataChunk(geminiCounter, 'system_instruction', JSONBody.system_instruction.parts.text);
     geminiRepository.save(geminiSystemInstruction);
     res.send({});
+    res.end();
   }
   if (JSONBody.length === 0) {
     geminiRepository.findContents()
@@ -73,11 +78,11 @@ router.post('/gemini', (req: Request, res: Response) => {
         let aiHttpClient = new AIHttpClient('gemini');
         aiHttpClient.setBody(r);
         aiHttpClient.post()
-          .then((response) => {res.send(response);})
-          .catch((err) => {res.send(err);});
+          .then((response) => {res.send(response); res.end();})
+          .catch((err) => {res.send(err); res.end()});
       })
       .then(() => {geminiRepository.close();})
-      .catch((err) => {res.send(err);});
+      .catch((err) => {res.send(err); res.end(); });
   }
 });
 

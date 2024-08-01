@@ -1,11 +1,3 @@
-// In the post() method, we are sending a POST request to the API endpoint with the body and token.
-// We are waiting for the response and returning the data.
-// Propose a modified version of the post() method that:
-// - Sends a POST request to the this.url endpoint, as it is now.
-// - Wait for the response
-// - Calculate the size of the response data in bytes
-// - Set the content-length header in the response headers with the size of the response data
-// - Return the response
 import axios from 'axios';
 
 export default class AIHttpClient {
@@ -45,15 +37,10 @@ export default class AIHttpClient {
     this.body = body;
   }
 
-  async post(): Promise<any> {
+  async post(): Promise<Object> {
     try {
       axios.defaults.headers.common[this.tokenHeaderName] = this.tokenHeaderValue;
-      axios.post(this.debugUrl, this.body);
       const response = await axios.post(this.url, this.body);
-      // Calculate the size of the response data in bytes
-      const dataSizeInBytes = Buffer.byteLength(JSON.stringify(response.data), 'utf8');
-      // Set the content-length header
-      response.headers['content-length'] = dataSizeInBytes;
       console.log(response.data);
       return response.data;
     } catch (error) {
